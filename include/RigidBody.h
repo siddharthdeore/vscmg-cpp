@@ -6,11 +6,6 @@
 #include "kinematics.h"
 #include <iomanip>
 
-#include <boost/numeric/odeint/integrate/integrate_const.hpp>
-#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
-#include <functional> // std:: bind, std::placeholders
-namespace pl = std::placeholders;
-namespace odeint = boost::numeric::odeint;
 
 class RigidBody : public IBaseSystem<7> {
 public:
@@ -79,20 +74,6 @@ public:
         return os;
     }
 
-    void step(const double& t_start, const double& t_end, const double& dt)
-    {
-        state_type X;
-        get_state(X);
-
-        integrate_const(stepper,
-            std::bind(&RigidBody::operator(), *this, pl::_1, pl::_2, pl::_3),
-            X,
-            t_start,
-            t_end,
-            dt);
-
-        set_state(X);
-    }
 };
 
 #endif

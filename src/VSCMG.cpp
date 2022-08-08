@@ -2,12 +2,6 @@
 #include <VSCMG.h>
 #include <math.h> /* sin, cos */
 
-#include <boost/numeric/odeint/integrate/integrate_const.hpp>
-#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
-#include <functional> // std:: bind, std::placeholders
-
-namespace pl = std::placeholders;
-namespace odeint = boost::numeric::odeint;
 
 VSCMG::VSCMG(const double& beta = 0.9553166181245093,
     const Eigen::Matrix<double, 3, 3>& Jp = Eigen::Matrix<double, 3, 3>::Identity(3, 3),
@@ -228,19 +222,4 @@ void VSCMG::set_state(
     _rate = w;
     _delta = delta;
     _Omega = Omega;
-}
-void VSCMG::step(const double& t_start, const double& t_end, const double& dt)
-{
-
-    state_type X;
-    get_state(X);
-
-    integrate_const(stepper,
-        std::bind(&VSCMG::operator(), *this, pl::_1, pl::_2, pl::_3),
-        X,
-        t_start,
-        t_end,
-        dt);
-
-    set_state(X);
 }

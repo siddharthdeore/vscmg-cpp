@@ -5,9 +5,6 @@
 #include <kinematics.h>
 
 #include "IBaseSystem.h"
-#include <Eigen/Core>
-#include <Eigen/Geometry>
-#include <boost/array.hpp>
 #include <iomanip>
 #include <memory>
 
@@ -37,11 +34,6 @@ public:
     Eigen::Matrix<double, 3, 4> get_gimbal_matrix() const;
     Eigen::Matrix<double, 3, 4> get_spin_matrix() const;
     Eigen::Matrix<double, 3, 4> get_transverse_matrix() const;
-
-    void step(
-        const double& t_start = 0.0,
-        const double& t_end = 1.0,
-        const double& dt = 0.001);
 
     Eigen::Matrix<double, 8, 1> calc_steering(
         const Eigen::Matrix<double, 3, 1>& torque,

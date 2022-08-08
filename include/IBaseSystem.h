@@ -7,6 +7,7 @@
 #include <Eigen/Geometry> // Quaternion
 
 #include <boost/array.hpp>
+#include <boost/numeric/odeint/integrate/integrate_const.hpp>
 #include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
 #include <functional> // std:: bind, std::placeholders
 
@@ -39,7 +40,20 @@ public:
     virtual void set_state(const state_type& state) = 0;
     virtual void get_state(state_type& state) = 0;
     virtual void operator()(const state_type& x_, state_type& dxdt_, double t) = 0;
-    virtual void step(const double& t_start, const double& t_end, const double& dt) = 0;
+    void step(const double& t_start, const double& t_end, const double& dt)
+    {
+        state_type X;
+        get_state(X);
+
+        integrate_const(stepper,
+            std::bind(&IBaseSystem::operator(), std::ref(*this), pl::_1, pl::_2, pl::_3),
+            X,
+            t_start,
+            t_end,
+            dt);
+
+        set_state(X);
+    }
 
 protected:
     Eigen::Quaternion<double> _quaternion;
