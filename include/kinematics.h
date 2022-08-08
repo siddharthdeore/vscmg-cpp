@@ -6,7 +6,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-static Eigen::Matrix<double, 3, 3> hat(const Eigen::Matrix<double, 3, 1>& v);
+static Eigen::Matrix<double, 3, 3> hat(
+    const Eigen::Matrix<double, 3, 1>& v);
 
 static Eigen::Quaternion<double> get_quaternion_error(
     const Eigen::Quaternion<double>& q,
@@ -15,6 +16,21 @@ static Eigen::Quaternion<double> get_quaternion_error(
 static Eigen::Quaternion<double> get_quaternion_kinematics(
     const Eigen::Quaternion<double>& q,
     const Eigen::Matrix<double, 3, 1>& w);
+
+static Eigen::Matrix<double, 3, 1> controller(
+    const Eigen::Quaternion<double>& qe,
+    const Eigen::Matrix<double, 3, 1>& we,
+    const double& Kq,
+    const double& Kw);
+
+static Eigen::Matrix<double, 3, 1> controller(
+    const Eigen::Quaternion<double>& qe,
+    const Eigen::Matrix<double, 3, 1>& we,
+    const double& Kq,
+    const double& Kw)
+{
+    return Kq * qe.vec() + Kw * we;
+}
 
 static Eigen::Quaternion<double> get_quaternion_kinematics(
     const Eigen::Quaternion<double>& q,
@@ -37,7 +53,8 @@ static Eigen::Quaternion<double> get_quaternion_error(
     return qd.inverse() * q;
 }
 
-static Eigen::Matrix<double, 3, 3> hat(const Eigen::Matrix<double, 3, 1>& v)
+static Eigen::Matrix<double, 3, 3> hat(
+    const Eigen::Matrix<double, 3, 1>& v)
 {
     Eigen::Matrix<double, 3, 3> mat;
     mat << 0, -v(2), v(1), v(2), 0, -v(0), -v(1), v(0), 0;

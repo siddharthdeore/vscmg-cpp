@@ -4,43 +4,63 @@
 #pragma once
 #include <kinematics.h>
 
+#include "IBaseSystem.h"
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <boost/array.hpp>
+#include <iomanip>
 #include <memory>
 
-typedef Eigen::Matrix<double, 4, 1> RWVelocities;
-typedef Eigen::Matrix<double, 4, 1> GimbalAngles;
-
-class VSCMG {
+class VSCMG : public IBaseSystem<15> {
 public:
-    typedef std::shared_ptr<VSCMG> Ptr;
-
+    VSCMG();
     VSCMG(const double& beta,
         const Eigen::Matrix<double, 3, 3>& Jp,
         const double& Jw,
         const double& Jcmg,
         const double& Jt);
-
     ~VSCMG();
+    void operator()(const state_type& x_, state_type& dxdt_, double t);
+    void set_state(const state_type& x_);
+    void get_state(state_type& x_);
 
     void updateCMGAxes();
+    void set_state(
+        const Eigen::Quaterniond q,
+        const Eigen::Vector3d w,
+        const Eigen::Matrix<double, 4, 1>& delta,
+        const Eigen::Matrix<double, 4, 1>& Omega);
+
+    void set_gimbal_angle(const Eigen::Matrix<double, 4, 1>& delta);
+    void set_wheel_velocity(const Eigen::Matrix<double, 4, 1>& Omega);
+
     Eigen::Matrix<double, 3, 4> get_gimbal_matrix() const;
     Eigen::Matrix<double, 3, 4> get_spin_matrix() const;
     Eigen::Matrix<double, 3, 4> get_transverse_matrix() const;
 
-    Eigen::Matrix<double, 3, 1> calc_torque(
-        const Eigen::Quaternion<double>& qe,
-        const Eigen::Matrix<double, 3, 1>& we,
-        const double& Kq,
-        const double& Kw);
+    void step(
+        const double& t_start = 0.0,
+        const double& t_end = 1.0,
+        const double& dt = 0.001);
 
-    Eigen::Matrix<double, 8, 1> calc_steering(const Eigen::Matrix<double, 3, 1>& torque);
+    Eigen::Matrix<double, 8, 1> calc_steering(
+        const Eigen::Matrix<double, 3, 1>& torque,
+        const double& t);
+
+    friend std::ostream& operator<<(std::ostream& os, const VSCMG& obj)
+    {
+        os << std::setw(6) << std::setprecision(4) << std::fixed;
+        os << "Quat  : " << obj._quaternion.w() << ", " << obj._quaternion.x() << ", " << obj._quaternion.y() << ", " << obj._quaternion.z() << "\n";
+        os << "Rate  : " << obj._rate.transpose() << "\n";
+        os << "delta : " << obj._delta.transpose() << "\n";
+        os << "Omega : " << obj._Omega.transpose() << "\n";
+        return os;
+    }
 
 private:
     double _beta;
 
-    Eigen::Quaternion<double> _quaternion;
-    Eigen::Matrix<double, 3, 1> _rate;
+    Eigen::Quaternion<double> _quaternion_desired;
 
     Eigen::Matrix<double, 4, 1> _delta; // gimbal angles
     Eigen::Matrix<double, 4, 1> _Omega; // reaction wheel velocities
