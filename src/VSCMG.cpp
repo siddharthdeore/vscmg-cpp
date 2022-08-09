@@ -2,7 +2,6 @@
 #include <VSCMG.h>
 #include <math.h> /* sin, cos */
 
-
 VSCMG::VSCMG(const double& beta = 0.9553166181245093,
     const Eigen::Matrix<double, 3, 3>& Jp = Eigen::Matrix<double, 3, 3>::Identity(3, 3),
     const double& Jw = 0.01,
@@ -133,20 +132,27 @@ void VSCMG::operator()(const state_type& x, state_type& dxdt, double t)
     // System Inertia Tensor
     const Eigen::Matrix<double, 3, 3> J = _Jp + _Jw * Gs * Gs.transpose() + _Jt * Gg * Gg.transpose() + _Jcmg * Gt * Gt.transpose();
 
+    // kinematics
     const Eigen::Quaterniond q_dot = get_quaternion_kinematics(q, w);
-    const Eigen::Quaterniond q_e = get_quaternion_error(q, this->_quaternion_desired);
 
-    const Eigen::Matrix<double, 3, 1> u = controller(q_e, w, 30.0, 4.0);
-    const Eigen::Matrix<double, 8, 1> delta_Omega_dot = calc_steering(u, t);
+    const Eigen::Matrix<double, 8, 1> delta_Omega_dot = -_action;
 
     // gimbal velocity deviation
     const auto delta_dot = delta_Omega_dot.block<4, 1>(0, 0);
     const auto Omega_dot = delta_Omega_dot.block<4, 1>(4, 0);
 
+    /* dynamics */
+
+    // Gimbal velocity contribution
     const Eigen::Matrix<double, 3, 1> term1 = (Gt * (delta_dot.asDiagonal() * (_Jw - _Jt)) * Gs.transpose() + Gs * ((delta_dot.asDiagonal()) * (_Jw - _Jt)) * Gt.transpose()) * w;
+
+    // Reaction wheel contribution
     const Eigen::Matrix<double, 3, 1> term2 = Gt * (_Jw * Omega.asDiagonal() * delta_dot) + Gs * (_Jw * Omega_dot);
+
+    // Gyroscopic effects due to variation of angular momentum of entire system
     const Eigen::Matrix<double, 3, 1> term3 = w.cross(J * w + Gg * _Jcmg * delta_dot + Gs * _Jw * Omega);
 
+    // eqation of motion of VSCMG dynamics
     const Eigen::Matrix<double, 3, 1> w_dot = J.inverse() * (-term1 - term2 - term3);
 
     dxdt[0] = q_dot.w();
@@ -168,6 +174,7 @@ void VSCMG::operator()(const state_type& x, state_type& dxdt, double t)
     dxdt[13] = Omega_dot[2];
     dxdt[14] = Omega_dot[3];
 }
+
 void VSCMG::set_state(const state_type& X)
 {
     _quaternion.w() = X[0];
@@ -190,6 +197,7 @@ void VSCMG::set_state(const state_type& X)
     _Omega[2] = X[13];
     _Omega[3] = X[14];
 }
+
 void VSCMG::get_state(state_type& X)
 {
     X[0] = _quaternion.w();

@@ -12,14 +12,18 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories(include)
  
-add_library (ADCS  src/VSCMG.cpp include/RigidBody.h)
+add_library (ADCS SHARED src/VSCMG.cpp include/RigidBody.h)
 target_link_libraries (ADCS Eigen3::Eigen)
 
-add_executable (TestVSCMG  examples/vscmg.cpp )
-target_link_libraries (TestVSCMG ADCS)
 
-add_executable (TestRigidBody  examples/rigid_body.cpp )
-target_link_libraries (TestRigidBody ADCS)    
 
+option(BUILD_EXAMPLES "Build Example " ON)
+if(${BUILD_EXAMPLES})
+    add_executable (TestVSCMG  examples/vscmg.cpp )
+    target_link_libraries (TestVSCMG ADCS)
+
+    add_executable (TestRigidBody  examples/rigid_body.cpp )
+    target_link_libraries (TestRigidBody ADCS)    
+endif()
 
 
