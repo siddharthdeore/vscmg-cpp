@@ -43,6 +43,8 @@ int main(int argc, char const* argv[])
 
         // calcualte control torques with required to bring rigid body in steady state
         auto u = Controller::quaternion_feedback(qe, w, 1.0, 0.1);
+        // discreate control action with actuator satuaration
+        // auto u = Controller::quaternion_feedback_discreate(qe, w, 1.0, 0.1,0.1,0.001);
 
         // apply controlled torque action and take time step of forward dynamics
         sat->step(u, t, t + 0.001, 0.001);
