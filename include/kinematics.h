@@ -19,17 +19,25 @@ static Eigen::Quaternion<double> get_quaternion_kinematics(
 
 static Eigen::Matrix<double, 3, 1> controller(
     const Eigen::Quaternion<double>& qe,
-    const Eigen::Matrix<double, 3, 1>& we,
-    const double& Kq,
-    const double& Kw);
-
+    const Eigen::Matrix<double, 3, 1>& w,
+    const double& K,
+    const double& C);
+/**
+ * @brief Generalized Quaternion Feedback Control law
+ *
+ * @param qe Error in desired and current orieantation
+ * @param w Angular velocity of rigid body
+ * @param K artificial stiffness coefficient
+ * @param C damping
+ * @return Eigen::Matrix<double, 3, 1>
+ */
 static Eigen::Matrix<double, 3, 1> controller(
     const Eigen::Quaternion<double>& qe,
-    const Eigen::Matrix<double, 3, 1>& we,
-    const double& Kq,
-    const double& Kw)
+    const Eigen::Matrix<double, 3, 1>& w,
+    const double& K,
+    const double& C)
 {
-    return Kq * qe.vec() + Kw * we;
+    return -K * qe.vec() * qe.w() - C * w;
 }
 
 static Eigen::Quaternion<double> get_quaternion_kinematics(
@@ -38,12 +46,12 @@ static Eigen::Quaternion<double> get_quaternion_kinematics(
 {
     Eigen::Matrix<double, 4, 4> Omega;
     Omega(0, 0) = 0.0;
-    Omega.block<3, 3>(1, 1) = hat(w);
-    Omega.block<3, 1>(1, 0) = w.transpose();
-    Omega.block<1, 3>(0, 1) = w;
+    Omega.block<3, 3>(1, 1) = -hat(w);
+    Omega.block<3, 1>(1, 0) = w;
+    Omega.block<1, 3>(0, 1) = -w.transpose();
     Eigen::Matrix<double, 4, 1> qv(q.w(), q.x(), q.y(), q.z());
-    qv = 0.5 * Omega * qv;
-    return Eigen::Quaternion<double>(qv(0), qv(1), qv(2), qv(3));
+    auto qvout = 0.5 * Omega * qv;
+    return Eigen::Quaternion<double>(qvout(0), qvout(1), qvout(2), qvout(3));
 }
 
 static Eigen::Quaternion<double> get_quaternion_error(
