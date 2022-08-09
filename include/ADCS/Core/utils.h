@@ -1,7 +1,8 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef _ADCS_CORE_UTILS_H
+#define _ADCS_CORE_UTILS_H
 
 #pragma once
+
 #include <Eigen/Core>
 #include <algorithm>
 #include <math.h>

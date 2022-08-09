@@ -1,5 +1,5 @@
+#include <ADCS/Systems/VSCMG.h>
 #include <Eigen/SVD>
-#include <VSCMG.h>
 #include <math.h> /* sin, cos */
 
 VSCMG::VSCMG(const double& beta = 0.9553166181245093,

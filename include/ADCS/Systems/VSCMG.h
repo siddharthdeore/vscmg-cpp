@@ -2,9 +2,10 @@
 #define VSCMG_H
 
 #pragma once
-#include <kinematics.h>
 
-#include "IBaseSystem.h"
+#include <ADCS/Core/kinematics.h>
+#include <ADCS/Core/IBaseSystem.h>
+
 #include <iomanip>
 #include <memory>
 

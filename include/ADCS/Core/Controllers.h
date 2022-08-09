@@ -1,9 +1,11 @@
-#ifndef CONTROLLERS_H
-#define CONTROLLERS_H
+#ifndef _ADCS_CONTROLLERS_H
+#define _ADCS_CONTROLLERS_H
 
 #pragma once
-#include "kinematics.h"
-#include "utils.h"
+
+#include <ADCS/Core/kinematics.h>
+#include <ADCS/Core/utils.h>
+
 namespace Controller {
 
 /**
