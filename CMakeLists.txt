@@ -11,24 +11,24 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories("include")
+include_directories(${EIGEN3_INCLUDE_DIR})
 
-file(GLOB ADCS_SRC
-     "include/ADCS/Core/*.h"
-)
+file(GLOB ADCS_SRC "include/ADCS/Core/*.h")
 
 add_library(ADCS SHARED ${ADCS_SRC})
 target_link_libraries (ADCS Eigen3::Eigen)
 set_target_properties(ADCS PROPERTIES LINKER_LANGUAGE CXX)
 
 
-add_library (VSCMG SHARED
-    src/ADCS/Systems/VSCMG.cpp)
-target_link_libraries (VSCMG ADCS Eigen3::Eigen)
+file(GLOB SYSTEMS_MODULES "src/ADCS/Systems/*.cpp")
+foreach(module_path ${SYSTEMS_MODULES})
+    get_filename_component(module_name ${module_path} NAME_WE)
 
-add_library (RigidBody SHARED
-    src/ADCS/Systems/RigidBody.cpp include/ADCS/Systems/RigidBody.h)
-target_link_libraries (RigidBody ADCS Eigen3::Eigen)
+    add_library(${module_name} SHARED ${module_path})
+    target_link_libraries (${module_name} ADCS Eigen3::Eigen)
+    set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
 
+endforeach()
 
 
 option(BUILD_EXAMPLES "Build Example " ON)
