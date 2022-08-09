@@ -6,8 +6,7 @@
 #include "kinematics.h"
 #include <iomanip>
 
-
-class RigidBody : public IBaseSystem<7> {
+class RigidBody : public IBaseSystem<7, 3> {
 public:
     RigidBody()
     {
@@ -54,8 +53,8 @@ public:
         // kinematics
         const Eigen::Quaterniond q_dot = get_quaternion_kinematics(q, w);
 
-        // rigid body dymaics Jw = w^Jw
-        const Eigen::Vector3d w_dot = -_Jp.inverse() * w.cross(_Jp * w);
+        // rigid body dymaics Jw_dot + w^Jw = u
+        const Eigen::Vector3d w_dot = -_Jp.inverse() * (w.cross(_Jp * w) - _action);
 
         dxdt[0] = q_dot.w();
         dxdt[1] = q_dot.x();

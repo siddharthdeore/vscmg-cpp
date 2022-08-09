@@ -1,3 +1,4 @@
+#include <Controllers.h>
 #include <VSCMG.h>
 #include <chrono>
 #include <iostream>
@@ -16,6 +17,7 @@ int main(int argc, char const* argv[])
 
     // initial state
     Eigen::Quaterniond q(cos(0.5), 0, sin(0.5), 0);
+    Eigen::Quaterniond qd(1.0, 0, 0, 0);
     Eigen::Matrix<double, 3, 1> w(0.01, 0.01, -0.01);
 
     // Reaction wheel angular velocities
@@ -27,6 +29,8 @@ int main(int argc, char const* argv[])
     sat->set_state(q, w, delta, Omega);
     sat->set_gimbal_angle(delta);
     sat->set_wheel_velocity(Omega);
+    VSCMG::action_type act;
+    act.setZero();
 
     // time
     double t = 0;
@@ -34,8 +38,21 @@ int main(int argc, char const* argv[])
     auto t1 = std::chrono::high_resolution_clock::now();
     for (size_t i = 0; i < max; i++) {
 
+        // get current state of Rigid Body (observations)
+        VSCMG::state_type X;
+        sat->get_state(X);
+
+        q = Eigen::Quaterniond(X[0], X[1], X[2], X[3]);
+        w = Eigen::Vector3d(X[4], X[5], X[6]);
+
+        // calculate error in reference state and current state
+        auto qe = get_quaternion_error(q, qd);
+
+        // calcualte control torques which required to bring rigid body in steady state
+        auto u = Controller::quaternion_feedback(qe, w, 10.0, 0.1);
+        act = sat->calc_steering(u, t);
         // integrate a step
-        sat->step(t, t + 0.001, 0.001);
+        sat->step(act, t, t + 0.001, 0.001);
 
         // verbose
         if (i % 100 == 0)

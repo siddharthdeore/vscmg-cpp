@@ -8,20 +8,26 @@
 #include <iomanip>
 #include <memory>
 
-class VSCMG : public IBaseSystem<15> {
+class VSCMG : public IBaseSystem<15,8> {
 public:
     VSCMG();
+
     VSCMG(const double& beta,
         const Eigen::Matrix<double, 3, 3>& Jp,
         const double& Jw,
         const double& Jcmg,
         const double& Jt);
+
     ~VSCMG();
+
     void operator()(const state_type& x_, state_type& dxdt_, double t);
+
     void set_state(const state_type& x_);
+
     void get_state(state_type& x_);
 
     void updateCMGAxes();
+
     void set_state(
         const Eigen::Quaterniond q,
         const Eigen::Vector3d w,
@@ -29,10 +35,29 @@ public:
         const Eigen::Matrix<double, 4, 1>& Omega);
 
     void set_gimbal_angle(const Eigen::Matrix<double, 4, 1>& delta);
+
     void set_wheel_velocity(const Eigen::Matrix<double, 4, 1>& Omega);
 
+    /**
+     * @brief Matrix of each column represents orientation of gimbal axis
+     * 
+     * @return Eigen::Matrix<double, 3, 4> 
+     */
     Eigen::Matrix<double, 3, 4> get_gimbal_matrix() const;
+
+    /**
+     * @brief Matrix of each column represents orientation of Reaction wheel spin axis
+     * 
+     * @return Eigen::Matrix<double, 3, 4> 
+     */
     Eigen::Matrix<double, 3, 4> get_spin_matrix() const;
+
+    /**
+     * @brief Matrix of each column represents orientation of cross product of
+     * Reaction wheel spin axis and gimbal axis.
+     * 
+     * @return Eigen::Matrix<double, 3, 4> 
+     */
     Eigen::Matrix<double, 3, 4> get_transverse_matrix() const;
 
     Eigen::Matrix<double, 8, 1> calc_steering(
@@ -50,7 +75,7 @@ public:
     }
 
 private:
-    double _beta;
+    double _beta; // skew angle of pyramid
 
     Eigen::Quaternion<double> _quaternion_desired;
 
