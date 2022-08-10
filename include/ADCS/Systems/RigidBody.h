@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <ADCS/Core/kinematics.h>
 #include <ADCS/Core/IBaseSystem.h>
+#include <ADCS/Core/kinematics.h>
 
 #include <iomanip>
 
@@ -31,6 +31,7 @@ public:
         os << "Rate  : " << obj._rate.transpose() << "\n";
         return os;
     }
+    action_type calc_steering( const Eigen::Matrix<double, 3, 1>& torque, const double& t = 0);
 };
 
 #endif

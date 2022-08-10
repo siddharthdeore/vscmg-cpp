@@ -72,7 +72,7 @@ Eigen::Matrix<double, 3, 4> VSCMG::get_transverse_matrix() const
     return Gt;
 }
 
-Eigen::Matrix<double, 8, 1> VSCMG::calc_steering(const Eigen::Matrix<double, 3, 1>& torque, const double& t = 0)
+Eigen::Matrix<double, 8, 1> VSCMG::calc_steering(const Eigen::Matrix<double, 3, 1>& torque, const double& t)
 {
 
     const auto D = _Jw * Gs; // RW
@@ -177,6 +177,7 @@ void VSCMG::operator()(const state_type& x, state_type& dxdt, double t)
 
 void VSCMG::set_state(const state_type& X)
 {
+    _state = X;
     _quaternion.w() = X[0];
     _quaternion.x() = X[1];
     _quaternion.y() = X[2];
