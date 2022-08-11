@@ -9,7 +9,7 @@ High performance <i>Spacecraft Attitude Dynamics and Control System</i> toolbox 
 # Systems
 - Rigid Body - Simple free floating rigid body.
 - VSCMG - Variable Speed Control Moment Gyroscope
-- ~~RW4 - Satellite with 4 Reaction wheels~~
+- RW4 - Satellite with tripod configration of 4 reaction wheels
 
 # Build
 ```
@@ -41,6 +41,29 @@ navigate to `bin` directory and run sample scripts `rigid_body.py` or `vscmg.py`
 python rigid_body.py
 ```
 
+## Source Tree
+```console
+.
+├── include
+│   └── ADCS                     # ADCS Core utils and interface
+│       └── Core
+│           ├── Controllers.h
+│           ├── IBaseSystem.h
+:                 :
+│
+├── src
+│   └── ADCS
+│       └── py_controller.cpp    # Python wrapper for controller
+:
+└── Systems                      # targets in Systems are classes 
+    ├── include                  # inherited from IBaseSystem
+    │   ├── RigidBody.h
+    │           :
+    └── src
+        ├── RigidBody.cpp
+                :
+
+```
 ## Requirements
 - C++ 14
 - [Boost](https://www.boost.org/)

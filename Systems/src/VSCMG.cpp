@@ -1,18 +1,7 @@
-#include <ADCS/Systems/VSCMG.h>
+#include "VSCMG.h"
 #include <Eigen/SVD>
 #include <math.h> /* sin, cos */
 
-VSCMG::VSCMG(const double& beta = 0.9553166181245093,
-    const Eigen::Matrix<double, 3, 3>& Jp = Eigen::Matrix<double, 3, 3>::Identity(3, 3),
-    const double& Jw = 0.01,
-    const double& Jcmg = 0.01,
-    const double& Jt = 0.01)
-    : _beta(beta)
-    , _Jp(Jp)
-    , _Jcmg(Jcmg)
-    , _Jt(Jt)
-{
-}
 VSCMG::VSCMG()
 {
     _beta = 0.9553166181245093,
@@ -22,6 +11,17 @@ VSCMG::VSCMG()
     _Jt = 0.01;
     _quaternion = Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0);
     _quaternion_desired = _quaternion;
+}
+VSCMG::VSCMG(const double& beta,
+    const Eigen::Matrix<double, 3, 3>& Jp,
+    const double& Jw,
+    const double& Jcmg,
+    const double& Jt)
+    : _beta(beta)
+    , _Jp(Jp)
+    , _Jcmg(Jcmg)
+    , _Jt(Jt)
+{
 }
 VSCMG::~VSCMG()
 {
@@ -232,3 +232,7 @@ void VSCMG::set_state(
     _delta = delta;
     _Omega = Omega;
 }
+
+#ifdef BUILD_PYTHON_LIB
+EXPOSE_SYSTEM_TO_PYTHON(VSCMG)
+#endif

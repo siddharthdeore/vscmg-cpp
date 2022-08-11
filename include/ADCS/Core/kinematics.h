@@ -44,10 +44,10 @@ static Eigen::Quaternion<double> get_quaternion_error(
 
 /**
  * @brief The time evolution of time varying quaternion q with angular velocity w
- * 
- * @param q 
- * @param w 
- * @return Eigen::Quaternion<double> 
+ *
+ * @param q
+ * @param w
+ * @return Eigen::Quaternion<double>
  */
 static Eigen::Quaternion<double> get_quaternion_kinematics(
     const Eigen::Quaternion<double>& q,

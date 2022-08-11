@@ -16,6 +16,19 @@
 #include <boost/python.hpp>
 #include <boost/python/numpy.hpp>
 namespace numpy = boost::python::numpy;
+
+#define EXPOSE_SYSTEM_TO_PYTHON(PYSYS_NAME)                                                                            \
+    BOOST_PYTHON_MODULE(lib##PYSYS_NAME)                                                                               \
+    {                                                                                                                  \
+        using namespace boost::python;                                                                                 \
+        numpy::initialize();                                                                                           \
+        Py_Initialize();                                                                                               \
+        class_<PYSYS_NAME>(#PYSYS_NAME)                                                                                \
+            .def("get_state", &PYSYS_NAME::py_get_state, "Returns numpy array of #PYSYS_NAME State vector")            \
+            .def("set_state", &PYSYS_NAME::py_set_state, "Set #PYSYS_NAME state vector with numpy array")              \
+            .def("step", &PYSYS_NAME::py_step, "Evaluation of system dynamics in time")                                \
+            .def("calc_steering", &PYSYS_NAME::py_calc_steering, "Transformation of torque vector to control action"); \
+    }
 #endif
 
 namespace pl = std::placeholders;

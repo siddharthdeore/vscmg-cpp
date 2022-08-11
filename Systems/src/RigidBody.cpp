@@ -1,4 +1,4 @@
-#include <ADCS/Systems/RigidBody.h>
+#include "RigidBody.h"
 RigidBody::RigidBody()
 {
     _quaternion = Eigen::Quaternion<double>(1.0, 0.0, 0.0, 0.0);
@@ -61,3 +61,7 @@ RigidBody::action_type RigidBody::calc_steering(const Eigen::Matrix<double, 3, 1
 {
     return torque;
 }
+
+#ifdef BUILD_PYTHON_LIB
+EXPOSE_SYSTEM_TO_PYTHON(RigidBody);
+#endif

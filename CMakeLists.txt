@@ -12,10 +12,10 @@ set(CMAKE_ROOT_PATH ${PROJECT_SOURCE_DIR})
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Type of build (Debug, Release etc." FORCE)
 
 
-option(BUILD_EXAMPLES       "Build Example "        ON)
+option(BUILD_EXAMPLES   "Build Example "        ON)
 option(BUILD_PYTHON_LIB "Build Python Wrapper " OFF)
 
-include_directories("include")
+include_directories("include" "Systems/include")
 
 if(${BUILD_PYTHON_LIB})
     add_compile_definitions(BUILD_PYTHON_LIB)
@@ -37,27 +37,27 @@ set_target_properties(ADCS PROPERTIES LINKER_LANGUAGE CXX)
 # ADCS System modules
 ######################################################
 
-file(GLOB SYSTEMS_MODULES "src/ADCS/Systems/*.cpp")
+#set(CMAKE_SHARED_LIBRARY_PREFIX "")
+file(GLOB SYSTEMS_MODULES "Systems/src/*.cpp")
 foreach(module_path ${SYSTEMS_MODULES})
     get_filename_component(module_name ${module_path} NAME_WE)
 
     add_library(${module_name} SHARED ${module_path} )
     target_link_libraries (${module_name} ADCS Eigen3::Eigen  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
-    target_include_directories(${module_name}  PRIVATE ${PYTHON_INCLUDE_DIRS})
+    #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
 endforeach()
 
 ######################################################
 # Python wrapper library
 ######################################################
-set(CMAKE_SHARED_MODULE_PREFIX "")
-add_library(pyadcs MODULE "src/ADCS/pyadcs.cpp")
-target_include_directories(pyadcs PRIVATE ${PYTHON_INCLUDE_DIRS})
-target_link_libraries (pyadcs ADCS Eigen3::Eigen RigidBody VSCMG  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
+add_library(Controller MODULE "src/ADCS/py_controller.cpp")
+target_include_directories(Controller PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_link_libraries (Controller Eigen3::Eigen ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
 IF (WIN32)
-    set_target_properties(pyadcs PROPERTIES SUFFIX .pyd)
+    set_target_properties(Controller PROPERTIES SUFFIX .pyd)
 ELSE()
-    set_target_properties(pyadcs PROPERTIES SUFFIX ".so")
+    set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
 
 
@@ -66,16 +66,19 @@ ENDIF()
 ######################################################
 
 if(${BUILD_EXAMPLES})
-    add_executable (TestVSCMG  examples/vscmg.cpp )
+    add_executable (TestVSCMG  examples/cpp/vscmg.cpp )
     target_link_libraries (TestVSCMG VSCMG)
 
-    add_executable (TestRigidBody  examples/rigid_body.cpp )
+    add_executable (TestRigidBody  examples/cpp/rigid_body.cpp )
     target_link_libraries (TestRigidBody RigidBody)    
 endif()
 
+######################################################
+# copy python samples to binary output directory
+######################################################
 
 if(${BUILD_PYTHON_LIB})
-    file(GLOB python_samples "python/*.py")
+    file(GLOB python_samples "examples/python/*.py")
     foreach(sample ${python_samples})
         file(COPY ${sample} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     endforeach()
