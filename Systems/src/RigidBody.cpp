@@ -1,5 +1,4 @@
-#include <ADCS/Systems/RigidBody.h>
-
+#include "RigidBody.h"
 RigidBody::RigidBody()
 {
     _quaternion = Eigen::Quaternion<double>(1.0, 0.0, 0.0, 0.0);
@@ -16,6 +15,7 @@ RigidBody::~RigidBody() { }
 
 void RigidBody::set_state(const state_type& state)
 {
+    _state = state;
     _quaternion.w() = state[0];
     _quaternion.x() = state[1];
     _quaternion.y() = state[2];
@@ -57,3 +57,11 @@ void RigidBody::operator()(const state_type& x, state_type& dxdt, double t)
     dxdt[5] = w_dot.y();
     dxdt[6] = w_dot.z();
 }
+RigidBody::action_type RigidBody::calc_steering(const Eigen::Matrix<double, 3, 1>& torque, const double& t)
+{
+    return torque;
+}
+
+#ifdef BUILD_PYTHON_LIB
+EXPOSE_SYSTEM_TO_PYTHON(RigidBody);
+#endif

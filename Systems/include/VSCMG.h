@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include <ADCS/Core/kinematics.h>
 #include <ADCS/Core/IBaseSystem.h>
+#include <ADCS/Core/kinematics.h>
 
 #include <iomanip>
 #include <memory>
 
-class VSCMG : public IBaseSystem<15,8> {
+class VSCMG : public IBaseSystem<15, 8> {
 public:
     VSCMG();
 
@@ -41,29 +41,27 @@ public:
 
     /**
      * @brief Matrix of each column represents orientation of gimbal axis
-     * 
-     * @return Eigen::Matrix<double, 3, 4> 
+     *
+     * @return Eigen::Matrix<double, 3, 4>
      */
     Eigen::Matrix<double, 3, 4> get_gimbal_matrix() const;
 
     /**
      * @brief Matrix of each column represents orientation of Reaction wheel spin axis
-     * 
-     * @return Eigen::Matrix<double, 3, 4> 
+     *
+     * @return Eigen::Matrix<double, 3, 4>
      */
     Eigen::Matrix<double, 3, 4> get_spin_matrix() const;
 
     /**
      * @brief Matrix of each column represents orientation of cross product of
      * Reaction wheel spin axis and gimbal axis.
-     * 
-     * @return Eigen::Matrix<double, 3, 4> 
+     *
+     * @return Eigen::Matrix<double, 3, 4>
      */
     Eigen::Matrix<double, 3, 4> get_transverse_matrix() const;
 
-    Eigen::Matrix<double, 8, 1> calc_steering(
-        const Eigen::Matrix<double, 3, 1>& torque,
-        const double& t);
+    action_type calc_steering(const Eigen::Matrix<double, 3, 1>& torque, const double& t);
 
     friend std::ostream& operator<<(std::ostream& os, const VSCMG& obj)
     {

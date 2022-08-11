@@ -11,6 +11,26 @@
 #include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
 #include <functional> // std:: bind, std::placeholders
 
+#ifdef BUILD_PYTHON_LIB
+#include "NumPyArrayData.h"
+#include <boost/python.hpp>
+#include <boost/python/numpy.hpp>
+namespace numpy = boost::python::numpy;
+
+#define EXPOSE_SYSTEM_TO_PYTHON(PYSYS_NAME)                                                                            \
+    BOOST_PYTHON_MODULE(lib##PYSYS_NAME)                                                                               \
+    {                                                                                                                  \
+        using namespace boost::python;                                                                                 \
+        numpy::initialize();                                                                                           \
+        Py_Initialize();                                                                                               \
+        class_<PYSYS_NAME>(#PYSYS_NAME)                                                                                \
+            .def("get_state", &PYSYS_NAME::py_get_state, "Returns numpy array of #PYSYS_NAME State vector")            \
+            .def("set_state", &PYSYS_NAME::py_set_state, "Set #PYSYS_NAME state vector with numpy array")              \
+            .def("step", &PYSYS_NAME::py_step, "Evaluation of system dynamics in time")                                \
+            .def("calc_steering", &PYSYS_NAME::py_calc_steering, "Transformation of torque vector to control action"); \
+    }
+#endif
+
 namespace pl = std::placeholders;
 namespace odeint = boost::numeric::odeint;
 
@@ -62,6 +82,7 @@ public:
      */
     virtual void operator()(const state_type& x_, state_type& dxdt_, double t) = 0;
 
+    virtual action_type calc_steering(const Eigen::Matrix<double, 3, 1>& torque, const double& t = 0);
     /**
      * @brief Set control action variable, action is controlable variable in system
      *
@@ -95,6 +116,53 @@ public:
         set_state(X);
     }
 
+#ifdef BUILD_PYTHON_LIB
+    // Python wrappers
+    void py_set_state(const numpy::ndarray& state)
+    {
+        state_type X;
+        NumPyArrayData<double> d(state);
+        for (size_t i = 0; i < STATE_SIZE; i++) {
+            X[i] = d(i);
+        }
+        set_state(X);
+    }
+    numpy::ndarray py_get_state()
+    {
+        state_type state;
+        get_state(state);
+        Py_intptr_t shape[1] = { state.size() };
+        numpy::ndarray result = numpy::zeros(1, shape, numpy::dtype::get_builtin<double>());
+        std::copy(state.begin(), state.end(), reinterpret_cast<double*>(result.get_data()));
+        return result;
+    }
+    numpy::ndarray py_step(const numpy::ndarray& action, const double& t_start = 0.0, const double& t_end = 0.01, const double& dt = 0.001)
+    {
+        action_type u;
+        NumPyArrayData<double> data(action);
+        for (size_t i = 0; i < ACTION_SIZE; i++) {
+            u[i] = data(i);
+        }
+
+        step(u);
+        return py_get_state();
+    }
+
+    numpy::ndarray py_calc_steering(const numpy::ndarray& torque, const double& t)
+    {
+        NumPyArrayData<double> data(torque);
+        Eigen::Vector3d u(data(0), data(1), data(2));
+        action_type act = calc_steering(u, t);
+
+        Py_intptr_t shape[1] = { ACTION_SIZE };
+        numpy::ndarray result_vector = numpy::zeros(1, shape, numpy::dtype::get_builtin<double>());
+        for (size_t i = 0; i < ACTION_SIZE; i++) {
+            result_vector[i] = act[i];
+        }
+        return result_vector;
+    }
+#endif
+
 protected:
     // body orientation quaternion
     Eigen::Quaternion<double> _quaternion;
@@ -107,6 +175,9 @@ protected:
 
     // control action vector
     action_type _action;
+
+    // state vector
+    state_type _state;
 
     // numeric integrator type
     odeint::runge_kutta4<state_type> stepper;
