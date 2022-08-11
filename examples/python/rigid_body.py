@@ -1,5 +1,5 @@
-from math import pi
-import sys
+from cmath import pi
+import sys, time
 import numpy as np
 
 # import rigid body and quaternion_control from pyadcs
@@ -9,6 +9,8 @@ from libController import quaternion_control
 # create RigidBody object instance
 body = RigidBody()
 
+# pretty print states
+np.set_printoptions(formatter={'float': '{: 0.4f}'.format})
 
 def main():
 
@@ -26,6 +28,8 @@ def main():
     DESIRED_STATE = np.array(
         [np.cos(45*pi/180.), 0., 0., np.sin(45*pi/180.), 0., 0., 0.])
 
+    t_next = time.time() + 0.01
+
     while(True):
 
         try:
@@ -39,9 +43,10 @@ def main():
             state = body.step(action, t, t+delta_t, delta_t/10.)
 
             # pretty print states
-            with np.printoptions(precision=4, suppress=True):
+            if(t_next< time.time() + 0.025):
                 print("Quaternion :" + str(state[0:4]))
                 print("Rate       :" + str(state[4:7])+"\n")
+                t_next = t_next + 0.025
 
             # increament time
             t = t + delta_t
