@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  vscmgcpp:
+    image: vscmgcpp
+    build:
+      context: .
+      dockerfile: ./Dockerfile
