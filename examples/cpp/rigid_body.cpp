@@ -32,8 +32,7 @@ int main(int argc, char const* argv[])
     auto t1 = std::chrono::high_resolution_clock::now();
     for (size_t i = 0; i < max; i++) {
         // get current state of Rigid Body (observations)
-        RigidBody::state_type X;
-        sat->get_state(X);
+        RigidBody::state_type X = sat->get_state();
 
         q = Eigen::Quaterniond(X[0], X[1], X[2], X[3]);
         w = Eigen::Vector3d(X[4], X[5], X[6]);
@@ -50,14 +49,8 @@ int main(int argc, char const* argv[])
         sat->step(u, t, t + 0.001, 0.001);
 
         // print state
-        if (i % 10 == 0) {
+        if (i % 100 == 0) {
             std::cout << *sat << "\n";
-            /*
-            std::cout << std::setw(8) << std::setprecision(3) << std::fixed
-                      << qe.w() << " " << qe.vec().transpose()
-                      << " w :" << w.transpose()
-                      << " u: " << u.transpose() << "\n";
-            */
         }
 
         t += 0.001;

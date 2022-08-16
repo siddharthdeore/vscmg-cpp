@@ -9,8 +9,8 @@ VSCMG::VSCMG()
     _Jw = 0.01,
     _Jcmg = 0.01,
     _Jt = 0.01;
-    _quaternion = Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0);
-    _quaternion_desired = _quaternion;
+
+    _state = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 }
 VSCMG::VSCMG(const double& beta,
     const Eigen::Matrix<double, 3, 3>& Jp,
@@ -22,6 +22,7 @@ VSCMG::VSCMG(const double& beta,
     , _Jcmg(Jcmg)
     , _Jt(Jt)
 {
+    _state = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 }
 VSCMG::~VSCMG()
 {
@@ -173,64 +174,6 @@ void VSCMG::operator()(const state_type& x, state_type& dxdt, double t)
     dxdt[12] = Omega_dot[1];
     dxdt[13] = Omega_dot[2];
     dxdt[14] = Omega_dot[3];
-}
-
-void VSCMG::set_state(const state_type& X)
-{
-    _state = X;
-    _quaternion.w() = X[0];
-    _quaternion.x() = X[1];
-    _quaternion.y() = X[2];
-    _quaternion.z() = X[3];
-    _quaternion.normalize();
-
-    _rate[0] = X[4];
-    _rate[1] = X[5];
-    _rate[2] = X[6];
-
-    _delta[0] = X[7];
-    _delta[1] = X[8];
-    _delta[2] = X[9];
-    _delta[3] = X[10];
-
-    _Omega[0] = X[11];
-    _Omega[1] = X[12];
-    _Omega[2] = X[13];
-    _Omega[3] = X[14];
-}
-
-void VSCMG::get_state(state_type& X)
-{
-    X[0] = _quaternion.w();
-    X[1] = _quaternion.x();
-    X[2] = _quaternion.y();
-    X[3] = _quaternion.z();
-
-    X[4] = _rate.x();
-    X[5] = _rate.y();
-    X[6] = _rate.z();
-
-    X[7] = _delta[0];
-    X[8] = _delta[1];
-    X[9] = _delta[2];
-    X[10] = _delta[3];
-
-    X[11] = _Omega[0];
-    X[12] = _Omega[1];
-    X[13] = _Omega[2];
-    X[14] = _Omega[3];
-}
-
-void VSCMG::set_state(
-    const Eigen::Quaterniond q,
-    const Eigen::Vector3d w,
-    const Eigen::Matrix<double, 4, 1>& delta,
-    const Eigen::Matrix<double, 4, 1>& Omega)
-{
-    _quaternion = q;
-    _rate = w;
-    _delta = delta;
-    _Omega = Omega;
 }
 
 #ifdef BUILD_PYTHON_LIB

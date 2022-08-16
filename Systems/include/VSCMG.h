@@ -23,17 +23,7 @@ public:
 
     void operator()(const state_type& x_, state_type& dxdt_, double t);
 
-    void set_state(const state_type& x_);
-
-    void get_state(state_type& x_);
-
     void updateCMGAxes();
-
-    void set_state(
-        const Eigen::Quaterniond q,
-        const Eigen::Vector3d w,
-        const Eigen::Matrix<double, 4, 1>& delta,
-        const Eigen::Matrix<double, 4, 1>& Omega);
 
     void set_gimbal_angle(const Eigen::Matrix<double, 4, 1>& delta);
 
@@ -66,23 +56,18 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const VSCMG& obj)
     {
         os << std::setw(6) << std::setprecision(4) << std::fixed;
-        os << "Quat  : " << obj._quaternion.w() << ", " << obj._quaternion.x() << ", " << obj._quaternion.y() << ", " << obj._quaternion.z() << "\n";
-        os << "Rate  : " << obj._rate.transpose() << "\n";
-        os << "delta : " << obj._delta.transpose() << "\n";
-        os << "Omega : " << obj._Omega.transpose() << "\n";
+        os << "Quat  : " << obj._state[0] << ", " << obj._state[1] << ", " << obj._state[2] << ", " << obj._state[3] << "\n";
+        os << "Rate  : " << obj._state[4] << ", " << obj._state[5] << ", " << obj._state[6] << "\n";
+        os << "delta : " << obj._state[7] << ", " << obj._state[8] << ", " << obj._state[9] << ", " << obj._state[10] << "\n";
+        os << "Omega : " << obj._state[11] << ", " << obj._state[12] << ", " << obj._state[13] << ", " << obj._state[14] << "\n";
         return os;
     }
 
 private:
     double _beta; // skew angle of pyramid
 
-    Eigen::Quaternion<double> _quaternion_desired;
-
     Eigen::Matrix<double, 4, 1> _delta; // gimbal angles
     Eigen::Matrix<double, 4, 1> _Omega; // reaction wheel velocities
-
-    Eigen::Matrix<double, 4, 1> _delta_dot; // gimbal velocities
-    Eigen::Matrix<double, 4, 1> _Omega_dot; // reaction wheel accelerations
 
     Eigen::Matrix<double, 3, 4> Gg; // Gimbal Axis Matrix
     Eigen::Matrix<double, 3, 4> Gs; // Spin Axis Matrix

@@ -70,7 +70,7 @@ if(${BUILD_EXAMPLES})
     target_link_libraries (TestVSCMG VSCMG)
 
     add_executable (TestRigidBody  examples/cpp/rigid_body.cpp )
-    target_link_libraries (TestRigidBody RigidBody)    
+    target_link_libraries (TestRigidBody RigidBody)
 endif()
 
 ######################################################

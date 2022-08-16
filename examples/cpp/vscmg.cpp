@@ -26,7 +26,8 @@ int main(int argc, char const* argv[])
     // gimbal angles
     Eigen::Matrix<double, 4, 1> delta(0, 0, 0, 0);
 
-    sat->set_state(q, w, delta, Omega);
+    VSCMG::state_type X0 = { q.w(), q.x(), q.y(), q.z(), w.x(), w.y(), w.z(), delta[0], delta[1], delta[2], delta[3], Omega[0], Omega[1], Omega[2], Omega[3] };
+    sat->set_state(X0);
     sat->set_gimbal_angle(delta);
     sat->set_wheel_velocity(Omega);
     VSCMG::action_type act;
@@ -39,8 +40,7 @@ int main(int argc, char const* argv[])
     for (size_t i = 0; i < max; i++) {
 
         // get current state of Rigid Body (observations)
-        VSCMG::state_type X;
-        sat->get_state(X);
+        VSCMG::state_type X = sat->get_state();
 
         q = Eigen::Quaterniond(X[0], X[1], X[2], X[3]);
         w = Eigen::Vector3d(X[4], X[5], X[6]);
