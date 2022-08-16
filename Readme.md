@@ -11,6 +11,13 @@ High performance <i>Spacecraft Attitude Dynamics and Control System</i> toolbox 
 - VSCMG - Variable Speed Control Moment Gyroscope
 - RW4 - Satellite with tripod configration of 4 reaction wheels
 
+Install Linux dependencies
+```
+sudo apt get install -y libboost-all-dev 
+sudo apt get install -y libeigen3-dev
+sudo apt get install -y python3 python3-pip
+```
+
 # Build
 ```
 mkdir build && cd build
