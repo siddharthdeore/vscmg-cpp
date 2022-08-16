@@ -47,6 +47,7 @@ def main():
     w = [0.,0.,0.]
     # set desired state vector in form of numpy array [qw qx qy qz wx wy wz]
     desired_state = np.array(quat+w)
+    body.set_inertia(1.0,2.0,3.0,0.0,0.0,0.0)
 
     t_next = time.time() + 0.01
 

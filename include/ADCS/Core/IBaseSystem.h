@@ -27,6 +27,7 @@ namespace numpy = boost::python::numpy;
             .def("set_state", &PYSYS_NAME::py_set_state, "Set #PYSYS_NAME state vector with numpy array")             \
             .def("step", &PYSYS_NAME::py_step, "Evaluation of system dynamics in time")                               \
             .def("calc_steering", &PYSYS_NAME::py_calc_steering, "Transformation of torque vector to control action") \
+            .def("set_inertia", &PYSYS_NAME::py_set_inertia, "set body inertia")                                      \
             .def("get_sample_action", &PYSYS_NAME::py_get_sample_action, "Get random action type array ");            \
     }
 #endif
@@ -142,6 +143,12 @@ public:
             X[i] = d(i);
         }
         set_state(X);
+    }
+    void py_set_inertia(double Ixx, double Iyy, double Izz, double Ixy, double Ixz, double Iyz)
+    {
+        _Jp << Ixx, Ixy, Ixz,
+            Ixy, Iyy, Iyz,
+            Ixz, Iyz, Izz;
     }
 
     numpy::ndarray py_get_state()

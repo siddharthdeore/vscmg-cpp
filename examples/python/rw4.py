@@ -29,6 +29,7 @@ def main():
         [np.cos(45*pi/180.), 0., 0., np.sin(45*pi/180.), 0., 0.,0.])
 
     t_next = time.time() + 0.01
+    body.set_inertia(1.0,2.0,3.0,0.0,0.0,0.0)
     
     while(True):
 
