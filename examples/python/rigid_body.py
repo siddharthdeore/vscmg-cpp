@@ -4,8 +4,8 @@ import time
 import numpy as np
 
 # import rigid body and quaternion_control from pyadcs
-from libRigidBody import RigidBody
-from libController import quaternion_control
+from adcs import RigidBody
+from adcs import quaternion_control
 
 # create RigidBody object instance
 body = RigidBody()

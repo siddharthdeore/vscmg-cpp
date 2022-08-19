@@ -3,8 +3,8 @@ import sys, time
 import numpy as np
 
 # import rigid body and quaternion_control from pyadcs
-from libVSCMG import VSCMG
-from libController import quaternion_control
+from adcs import VSCMG
+from adcs import quaternion_control
 
 # create VSCMG object instance
 body = VSCMG()

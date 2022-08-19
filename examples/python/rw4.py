@@ -3,8 +3,8 @@ import sys, time
 import numpy as np
 
 # import rigid body and quaternion_control from pyadcs
-from libRW4 import RW4
-from libController import quaternion_control
+from adcs import RW4
+from adcs import quaternion_control
 
 # create RW4 object instance
 body = RW4()

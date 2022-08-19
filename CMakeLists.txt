@@ -47,7 +47,7 @@ foreach(module_path ${SYSTEMS_MODULES})
     target_link_libraries (${module_name} ADCS Eigen3::Eigen  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
 
-    install(TARGETS ${module_name} DESTINATION ${Python3_SITELIB} )
+    install(TARGETS ${module_name} DESTINATION ${Python3_SITELIB}/adcs )
     #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
 endforeach()
 
@@ -62,8 +62,8 @@ IF (WIN32)
 ELSE()
     set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
-install(TARGETS Controller DESTINATION ${Python3_SITELIB} )
-
+install(TARGETS Controller DESTINATION ${Python3_SITELIB}/adcs )
+install(FILES __init__.py DESTINATION ${Python3_SITELIB}/adcs)
 
 
 ######################################################
