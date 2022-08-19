@@ -19,6 +19,7 @@ include_directories("include" "Systems/include")
 
 if(${BUILD_PYTHON_LIB})
     add_compile_definitions(BUILD_PYTHON_LIB)
+    find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -45,6 +46,8 @@ foreach(module_path ${SYSTEMS_MODULES})
     add_library(${module_name} SHARED ${module_path} )
     target_link_libraries (${module_name} ADCS Eigen3::Eigen  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
+
+    install(TARGETS ${module_name} DESTINATION ${Python3_SITELIB} )
     #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
 endforeach()
 
@@ -59,6 +62,8 @@ IF (WIN32)
 ELSE()
     set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
+install(TARGETS Controller DESTINATION ${Python3_SITELIB} )
+
 
 
 ######################################################
@@ -83,3 +88,16 @@ if(${BUILD_PYTHON_LIB})
         file(COPY ${sample} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     endforeach()
 endif()
+
+
+
+# make uninstall
+add_custom_target("uninstall" COMMENT "Uninstall installed files")
+add_custom_command(
+    TARGET "uninstall"
+    POST_BUILD
+    COMMENT "Uninstall files with install_manifest.txt"
+    COMMAND xargs rm -vf < install_manifest.txt || echo Nothing in
+            install_manifest.txt to be uninstalled!
+)
+
