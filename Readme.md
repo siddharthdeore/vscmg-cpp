@@ -25,9 +25,15 @@ Make and install
 mkdir build && cd build
 cmake ..
 make
+make install
 ```
 
-# Examples
+Uninstall
+```
+make install
+```
+
+# Examplese
 Executable targets are located in `bin` directory
 ```
 # Rigid Body 
@@ -81,5 +87,17 @@ python rigid_body.py
 - Python 2.7+
 
 
+# Docker
+```
+# Build image
+docker build --pull --rm -f "Dockerfile" -t vscmgcpp:latest "."
+# or
+# docker compose -f "docker-compose.yml" down
 
+# run container in iteractive mode
+docker run --rm -it  vscmgcpp:latest
+
+# run python examples e.g. vscmg
+python3 vscmg.py
+```
 ⚠️ Note : This toolbox was written for MSc Thesis titled <i> Neural Network based steering and Hardware in Loop Simulation of Variable Speed Control Moment Gyroscope</i>
