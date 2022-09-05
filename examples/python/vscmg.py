@@ -61,7 +61,7 @@ def main():
             torque = quaternion_control(state, desired_state, K, C)
 
             # compute required actuator signals from given torque
-            action = body.calc_steering(torque, 0.0)
+            action = body.calc_steering(torque, t)
 
             # integrate step in time with control action
             state = body.step(action, t, t+delta_t, delta_t/10.)
