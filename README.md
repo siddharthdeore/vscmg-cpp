@@ -37,11 +37,11 @@ make install
 Executable targets are located in `bin` directory
 ```
 # Rigid Body 
-cd ../bin
+cd build/bin
 ./TestRigidBody
 
 # Variable Speed Control Moment Gyroscope
-cd ../bin
+cd build/bin
 ./TestVSCMG
 
 ```
@@ -52,7 +52,8 @@ cmake .. -DBUILD_PYTHON_LIB=True
 make
 ```
 # Run python samples
-navigate to `bin` directory and run sample scripts `rigid_body.py` or `vscmg.py` eg.
+To use library modules in python install library with `make install`, and navigate to `bin` directory and run sample scripts `rigid_body.py` or `vscmg.py`,  eg.
+
 ```
 python rigid_body.py
 ```
@@ -101,3 +102,9 @@ docker run --rm -it  vscmgcpp:latest
 python3 vscmg.py
 ```
 ⚠️ Note : This toolbox was written for MSc Thesis titled <i> Neural Network based steering and Hardware in Loop Simulation of Variable Speed Control Moment Gyroscope</i>
+
+
+## Maintainers
+This repository is maintained by:
+|<img src="https://github.com/siddharthdeore.png" width="32">| [siddharth deore](https://github.com/siddharthdeore)|
+|--|--|
