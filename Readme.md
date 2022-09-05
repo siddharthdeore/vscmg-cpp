@@ -25,9 +25,15 @@ Make and install
 mkdir build && cd build
 cmake ..
 make
+make install
 ```
 
-# Examples
+Uninstall
+```
+make install
+```
+
+# Examplese
 Executable targets are located in `bin` directory
 ```
 # Rigid Body 
