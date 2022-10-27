@@ -66,9 +66,16 @@ foreach(module_path ${SYSTEMS_MODULES})
     target_link_libraries (${module_name} ADCS Eigen3::Eigen  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(${module_name} PROPERTIES PUBLIC_HEADER "include/ADCS/Systems/${module_name}.h")
-    install(TARGETS ${module_name}
-        LIBRARY DESTINATION ${Python3_SITELIB}/adcs 
-        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
+
+    if(${BUILD_PYTHON_LIB})
+        install(TARGETS ${module_name}
+            LIBRARY DESTINATION lib
+            PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
+    else()
+    install(TARGETS ${module_name} 
+            LIBRARY DESTINATION ${Python3_SITELIB}/adcs 
+            PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
+    endif()
     #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
 endforeach()
 
@@ -84,8 +91,18 @@ ELSE()
     set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
 
-install(TARGETS Controller LIBRARY DESTINATION ${Python3_SITELIB}/adcs)
-install(FILES __init__.py DESTINATION ${Python3_SITELIB}/adcs)
+if(${BUILD_PYTHON_LIB})
+
+    install(TARGETS Controller
+        LIBRARY DESTINATION ${Python3_SITELIB}/adcs
+    )
+    install(FILES __init__.py DESTINATION ${Python3_SITELIB}/adcs)
+else()
+    install(TARGETS Controller 
+            LIBRARY DESTINATION lib
+    )
+endif()
+
 
 
 ######################################################
