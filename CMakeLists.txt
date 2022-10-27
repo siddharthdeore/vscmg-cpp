@@ -46,21 +46,29 @@ file(GLOB ADCS_SRC "include/ADCS/Core/*.h")
 add_library(ADCS SHARED ${ADCS_SRC})
 target_link_libraries (ADCS Eigen3::Eigen ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 set_target_properties(ADCS PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(ADCS PROPERTIES PUBLIC_HEADER
+    "include/ADCS/Core/Controllers.h;include/ADCS/Core/IBaseSystem.h;include/ADCS/Core/NumPyArrayData.h;include/ADCS/Core/kinematics.h;include/ADCS/Core/utils.h"
+)
+install(TARGETS ADCS
+    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Core/"
+)
 
 ######################################################
 # ADCS System modules
 ######################################################
 
 #set(CMAKE_SHARED_LIBRARY_PREFIX "")
-file(GLOB SYSTEMS_MODULES "Systems/src/*.cpp")
+file(GLOB SYSTEMS_MODULES "src/ADCS/Systems/*.cpp")
 foreach(module_path ${SYSTEMS_MODULES})
     get_filename_component(module_name ${module_path} NAME_WE)
 
     add_library(${module_name} SHARED ${module_path} )
     target_link_libraries (${module_name} ADCS Eigen3::Eigen  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}  ${BOOST_NUMPY_LIBRARY})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
-
-    install(TARGETS ${module_name} DESTINATION ${Python3_SITELIB}/adcs )
+    set_target_properties(${module_name} PROPERTIES PUBLIC_HEADER "include/ADCS/Systems/${module_name}.h")
+    install(TARGETS ${module_name}
+        LIBRARY DESTINATION ${Python3_SITELIB}/adcs 
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
     #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
 endforeach()
 
@@ -75,7 +83,8 @@ IF (WIN32)
 ELSE()
     set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
-install(TARGETS Controller DESTINATION ${Python3_SITELIB}/adcs )
+
+install(TARGETS Controller LIBRARY DESTINATION ${Python3_SITELIB}/adcs)
 install(FILES __init__.py DESTINATION ${Python3_SITELIB}/adcs)
 
 

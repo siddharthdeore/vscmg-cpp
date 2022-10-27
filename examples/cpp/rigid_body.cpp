@@ -1,5 +1,5 @@
 #include <ADCS/Core/Controllers.h>
-#include <RigidBody.h>
+#include <ADCS/Systems/RigidBody.h>
 #include <chrono>
 #include <iomanip>
 #include <iostream>

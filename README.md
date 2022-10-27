@@ -63,22 +63,22 @@ python rigid_body.py
 .
 ├── include
 │   └── ADCS                     # ADCS Core utils and interface
-│       └── Core
-│           ├── Controllers.h
-│           ├── IBaseSystem.h
-:                 :
-│
-├── src
-│   └── ADCS
-│       └── py_controller.cpp    # Python wrapper for controller
-:
-└── Systems                      # targets in Systems are classes 
-    ├── include                  # inherited from IBaseSystem
-    │   ├── RigidBody.h
-    │           :
-    └── src
-        ├── RigidBody.cpp
-                :
+│       ├── Core
+│       │   ├── Controllers.h
+│       │   ├── IBaseSystem.h
+:       :         :
+│       │
+│       └── Systems             # Public headers for Systems
+│           ├── RigidBody.h
+│           ├── RW4.h
+│                 :
+└── src
+    └── ADCS
+        ├── py_controller.cpp    # Python wrapper for controller
+        └── Systems              # targets in Systems are classes 
+            ├── RigidBody.cpp    # inherited from IBaseSystem
+            ├── RW4.cpp
+            └── VSCMG.cpp
 
 ```
 ## Requirements

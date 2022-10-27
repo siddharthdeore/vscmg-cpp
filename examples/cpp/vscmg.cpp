@@ -1,5 +1,5 @@
 #include <ADCS/Core/Controllers.h>
-#include <VSCMG.h>
+#include <ADCS/Systems/VSCMG.h>
 #include <chrono>
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "VSCMG.h"
+#include <ADCS/Systems/VSCMG.h>
 #include <Eigen/SVD>
 #include <math.h> /* sin, cos */
 

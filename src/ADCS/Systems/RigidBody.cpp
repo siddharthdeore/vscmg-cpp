@@ -1,4 +1,4 @@
-#include "RigidBody.h"
+#include <ADCS/Systems/RigidBody.h>
 RigidBody::RigidBody()
 {
     _Jp = Eigen::Matrix<double, 3, 3>::Identity(3, 3);
