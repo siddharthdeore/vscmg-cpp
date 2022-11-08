@@ -16,9 +16,9 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
     endif()
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/adcs")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 set(CMAKE_ROOT_PATH ${PROJECT_SOURCE_DIR})
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -67,16 +67,10 @@ foreach(module_path ${SYSTEMS_MODULES})
     set_target_properties(${module_name} PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(${module_name} PROPERTIES PUBLIC_HEADER "include/ADCS/Systems/${module_name}.h")
 
-    if(${BUILD_PYTHON_LIB})
-        install(TARGETS ${module_name}
-            LIBRARY DESTINATION lib
-            PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
-    else()
-    install(TARGETS ${module_name} 
-            LIBRARY DESTINATION ${Python3_SITELIB}/adcs 
-            PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
-    endif()
-    #target_include_directories(${module_name} PUBLIC ${PYTHON_INCLUDE_DIRS})
+    install(TARGETS ${module_name}
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ADCS/Systems/")
+
 endforeach()
 
 ######################################################
@@ -91,17 +85,12 @@ ELSE()
     set_target_properties(Controller PROPERTIES SUFFIX ".so")
 ENDIF()
 
-if(${BUILD_PYTHON_LIB})
+install(TARGETS Controller 
+        LIBRARY DESTINATION DESTINATION lib
+    )
 
-    install(TARGETS Controller
-        LIBRARY DESTINATION ${Python3_SITELIB}/adcs
-    )
-    install(FILES __init__.py DESTINATION ${Python3_SITELIB}/adcs)
-else()
-    install(TARGETS Controller 
-            LIBRARY DESTINATION lib
-    )
-endif()
+#install(FILES __init__.py DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/adcs)
+file(COPY __init__.py DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 
 
