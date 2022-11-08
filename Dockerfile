@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y            \
     # python3 for python bindings
     python3                                         \
     # pip
-    python3-pip 
+    python3-pip                                     \
+    python-is-python3
 
 # install numpy
 RUN pip3 install numpy
@@ -37,7 +38,7 @@ RUN set -ex;                            \
     cmake .. -DBUILD_PYTHON_LIB=True;   \
     make;
 
-WORKDIR /usr/src/vscmgcpp/bin
+WORKDIR /usr/src/vscmgcpp/build
 
 CMD ["bash"]
 
