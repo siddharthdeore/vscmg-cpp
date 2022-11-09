@@ -24,21 +24,31 @@ RUN apt-get update && apt-get install -y            \
     python3                                         \
     # pip
     python3-pip                                     \
-    python-is-python3
+    python-is-python3                               \
+    && rm -rf /var/lib/apt/lists/*
 
 # install numpy
 RUN pip3 install numpy
 
 # Set the locale
-#RUN locale-gen en_US.UTF-8
-
+# RUN locale-gen en_US.UTF-8
+# build annd install adcs library
 RUN set -ex;                            \
     mkdir -p /usr/src/vscmgcpp/build;   \
     cd /usr/src/vscmgcpp/build;         \
     cmake .. -DBUILD_PYTHON_LIB=True;   \
-    make;
+    make;                               \
+    make install
 
-WORKDIR /usr/src/vscmgcpp/build
+WORKDIR /usr/src/vscmgcpp/
+RUN touch README.md
+RUN python setup.py build
+RUN pip install .
+
+# Remove source code
+RUN rm -rf cmake/ docker include/ src/ Dockerfile adcs.egg-info/
+
+WORKDIR /usr/src/vscmgcpp/examples/python
 
 CMD ["bash"]
 
