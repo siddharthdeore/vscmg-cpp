@@ -28,12 +28,12 @@ make
 make install
 ```
 
-Uninstall
+# Uninstall adcs library
 ```
-make install
+make uninstall
 ```
 
-# Examplese
+# Examples
 Executable targets are located in `bin` directory
 ```
 # Rigid Body 
@@ -51,6 +51,15 @@ Build with python interface wrapper library. Following comand executed in build 
 cmake .. -DBUILD_PYTHON_LIB=True
 make
 ```
+To install python interface library with pip, in projecto root directory 
+```
+pip install .
+```
+To uninstall python interface library 
+```
+pip uninstall adcs
+```
+
 # Run python samples
 To use library modules in python install library with `make install`, and navigate to `bin` directory and run sample scripts `rigid_body.py` or `vscmg.py`,  eg.
 
