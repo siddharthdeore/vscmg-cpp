@@ -112,6 +112,31 @@ python3 vscmg.py
 ```
 ⚠️ Note : This toolbox was written for MSc Thesis titled <i> Neural Network based steering and Hardware in Loop Simulation of Variable Speed Control Moment Gyroscope</i>
 
+## Cite
+
+1. Attitude control of a fast-retargeting agile nanosatellite using Neural Network based steering for Variable Speed Control Moment Gyroscopes}
+
+```
+@inproceedings{inproceedings,
+author = {Deore, Siddharth and Santoni, Fabio and Piergentili, Fabrizio and Marzioli, Paolo},
+year = {2021},
+month = {06},
+pages = {},
+title = {Attitude control of a fast-retargeting agile nanosatellite using Neural Network based steering for Variable Speed Control Moment Gyroscopes}
+}
+```
+
+2. Design and Manufacturing of Hardware in Loop simulation testbed equipped with Variable Speed Control Moment Gyroscopes
+
+```
+@inproceedings{inproceedings,
+author = {Deore, Siddharth and Santoni, Fabio and Piergentili, Fabrizio and Marzioli, Paolo},
+year = {2021},
+month = {06},
+pages = {},
+title = {Design and Manufacturing of Hardware in Loop simulation testbed equipped with Variable Speed Control Moment Gyroscopes}
+}
+```
 
 ## Maintainers
 This repository is maintained by:
