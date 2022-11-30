@@ -121,7 +121,7 @@ python3 vscmg.py
 
 1. Attitude control of a fast-retargeting agile nanosatellite using Neural Network based steering for Variable Speed Control Moment Gyroscopes}
 
-```
+```bibtex
 @inproceedings{inproceedings,
 author = {Deore, Siddharth and Santoni, Fabio and Piergentili, Fabrizio and Marzioli, Paolo},
 year = {2021},
@@ -133,7 +133,7 @@ title = {Attitude control of a fast-retargeting agile nanosatellite using Neural
 
 2. Design and Manufacturing of Hardware in Loop simulation testbed equipped with Variable Speed Control Moment Gyroscopes
 
-```
+```bibtex
 @inproceedings{inproceedings,
 author = {Deore, Siddharth and Santoni, Fabio and Piergentili, Fabrizio and Marzioli, Paolo},
 year = {2021},
