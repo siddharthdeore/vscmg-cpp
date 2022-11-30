@@ -103,7 +103,7 @@ python rigid_body.py
 docker pull siddharthdeore/vscmgcpp:latest
 
 # run container in iteractive mode
-docker run --rm -it  vscmgcpp:latest
+docker run --rm -it  siddharthdeore/vscmgcpp:latest
 
 
 # Build image from source
