@@ -100,7 +100,7 @@ python rigid_body.py
 # Docker
 ```
 # Pull latest image from dockerhub
-docker pull siddharthdeore/vscmgcpp
+docker pull siddharthdeore/vscmgcpp:latest
 
 # run container in iteractive mode
 docker run --rm -it  vscmgcpp:latest
