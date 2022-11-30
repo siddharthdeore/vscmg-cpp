@@ -99,13 +99,18 @@ python rigid_body.py
 
 # Docker
 ```
-# Build image
+# Pull latest image from dockerhub
+docker pull siddharthdeore/vscmgcpp
+
+# run container in iteractive mode
+docker run --rm -it  vscmgcpp:latest
+
+
+# Build image from source
 docker build --pull --rm -f "Dockerfile" -t vscmgcpp:latest "."
 # or
 # docker compose -f "docker-compose.yml" down
 
-# run container in iteractive mode
-docker run --rm -it  vscmgcpp:latest
 
 # run python examples e.g. vscmg
 python3 vscmg.py
