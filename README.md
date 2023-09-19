@@ -4,7 +4,11 @@
 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Eigen_Silly_Professor_135x135.png" width ="16" alt="Eigen (C++ library)">
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Boost.png" width ="40" alt="BOOST (C++ library)">
 
-High performance <i>Spacecraft Attitude Dynamics and Control System</i> toolbox with exposed python extention. Scalable toolbox uses Eigen3 for linear algebra and Boost for integration of system ODE . Currently there are three sample systems and more can be added provided that new systems are inherited from `IBaseSystem` base interface class and follow same structure. The <b>`pyadcs`</b> extention expose C++ classes and functions of <b>`ADCS`</b> library to fo.
+High performance <i>Spacecraft Attitude Dynamics and Control System</i> toolbox with exposed python extention. Scalable toolbox uses Eigen3 for linear algebra and Boost for integration of system ODE . Currently there are three sample systems and more can be added provided that new systems are inherited from `IBaseSystem` base interface class and follow same structure. The <b>`pyadcs`</b> extention expose C++ classes and functions of <b>`ADCS`</b> library to python.
+
+1. Compiled final report in pdf format [
+tessi_DEORE_1823670.pdf](https://github.com/siddharthdeore/VSCMGThesisReport/releases/download/Defence/tessi_DEORE_1823670.pdf)
+2. System URDF [vscmg_description](https://github.com/siddharthdeore/vscmg_description)
 
 # Systems
 - Rigid Body - Simple free floating rigid body.
