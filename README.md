@@ -8,7 +8,8 @@ High performance <i>Spacecraft Attitude Dynamics and Control System</i> toolbox 
 
 1. Compiled final report in pdf format [
 tessi_DEORE_1823670.pdf](https://github.com/siddharthdeore/VSCMGThesisReport/releases/download/Defence/tessi_DEORE_1823670.pdf)
-2. System URDF [vscmg_description](https://github.com/siddharthdeore/vscmg_description)
+2. Thesis Report repository [VSCMGThesisReport](https://github.com/siddharthdeore/VSCMGThesisReport)
+3. System URDF [vscmg_description](https://github.com/siddharthdeore/vscmg_description)
 
 # Systems
 - Rigid Body - Simple free floating rigid body.
